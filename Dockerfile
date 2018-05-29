@@ -26,3 +26,30 @@ RUN touch /root/.komodo/komodo.conf
 
 #Run and synchronize the komodo daemon
 RUN komodo/src/komodod -daemon
+
+#Install Litecoin dependencies
+RUN apt-get -y install build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils libboost-all-dev libdb++-dev
+
+#Clone the LiteCoin repository
+RUN git clone https://github.com/litecoin-project/litecoin
+
+#Generate the litecoin configure script
+RUN litecoin/autogen.sh
+
+#Configure litecoin based on building machine's hardware
+RUN litecoin/configure --with-incompatible-bdb --with-gui=no --prefix=/litecoin
+
+#Build litecoin, based on system configuration
+RUN make 
+
+#Install litecoin
+RUN make install
+
+#Create the .litecoin directory in root's home
+RUN mkdir /root/.litecoin
+
+#Copy the litecoin.conf file to root's home
+COPY litecoin.conf /root/.litecoin
+
+#Start the litecoin daemon
+RUN litecoin/bin/litecoind -daemon
