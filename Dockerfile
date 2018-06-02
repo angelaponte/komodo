@@ -26,7 +26,7 @@ RUN mkdir /root/.komodo
 #Use default configuration for zcashd
 RUN touch /root/.komodo/komodo.conf
 
-#Run and synchronize the komodo daemon
+#Run and synchronize the komodo daemon -- probably want this in a container startup script using the ENTRYPOINT keyword instead
 RUN /opt/komodo/src/komodod -daemon
 #####End Komodo installation#####
 
@@ -55,7 +55,7 @@ RUN mkdir /root/.litecoin
 #Copy the litecoin.conf file to root's home
 COPY litecoin.conf /root/.litecoin
 
-#Start the litecoin daemon
+#Start the litecoin daemon -- probably want this in a container startup script using the ENTRYPOINT keyword instead
 RUN /opt/litecoin/bin/litecoind -daemon
 #####End Litecoin installation#####
 
@@ -86,3 +86,5 @@ RUN cd /opt/SuperNET/iguana/exchanges && git checkout dev
 
 #Install SuperNET
 RUN cd /opt/SuperNET/iguana/exchanges && ./install
+
+
